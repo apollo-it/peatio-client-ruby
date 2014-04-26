@@ -1,11 +1,11 @@
-require 'active_support/core_ext'
-require 'active_support/hash_with_indifferent_access'
 require 'json'
 require 'net/http'
 require_relative 'client/version'
 
 module PeatioAPI
   class Client
+
+    attr :auth
 
     def initialize(options={})
       options.symbolize_keys!
@@ -15,14 +15,12 @@ module PeatioAPI
 
     def get(path, params={})
       uri = URI("#{@endpoint}#{path}")
-      uri.query = URI.encode_www_form(params) if params.present?
-      response = Net::HTTP.get_response(uri)
 
-      if response.code == '200'
-        JSON.parse response.body
-      else
-        raise "Request failed: #{response.body}"
-      end
+      # sign on all requests, even those to public API
+      signed_params = @auth.signed_params 'GET', path, params
+      uri.query = URI.encode_www_form signed_params
+
+      parse Net::HTTP.get_response(uri)
     end
 
     def post(path, params={})
@@ -30,10 +28,19 @@ module PeatioAPI
 
     private
 
+    def parse(response)
+      if response.code == '200'
+        JSON.parse response.body
+      else
+        raise "Request failed: #{response.body}"
+      end
+    end
+
     def setup_auth_keys(options)
       if options[:access_key] && options[:secret_key]
         @access_key = options[:access_key]
         @secret_key = options[:secret_key]
+        @auth       = Auth.new @access_key, @secret_key
       else
         raise ArgumentError, 'Missing access key and/or secret key'
       end
