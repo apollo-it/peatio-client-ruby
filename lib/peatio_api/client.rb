@@ -25,8 +25,10 @@ module PeatioAPI
 
     def post(path, params={})
       uri = URI("#{@endpoint}#{path}")
-      params = @auth.signed_params 'POST', path, params
-      parse Net::HTTP.post_form(uri, params)
+      Net::HTTP.new(uri.hostname, uri.port).start do |http|
+        params = @auth.signed_params 'POST', path, params
+        parse http.request_post(path, params.to_query)
+      end
     end
 
     private

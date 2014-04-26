@@ -8,7 +8,7 @@ module PeatioAPI
 
     def signed_params(verb, path, params={})
       params    = format_params params
-      signature = sign verb, path, params.to_query
+      signature = sign verb, path, URI.unescape(params.to_query)
       params.merge(signature: signature)
     end
 
