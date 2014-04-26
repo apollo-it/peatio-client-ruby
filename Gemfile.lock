@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-client (0.0.1)
+    peatio_client (0.0.1)
       activesupport
 
 GEM
@@ -25,5 +25,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  peatio-client!
+  peatio_client!
   rake

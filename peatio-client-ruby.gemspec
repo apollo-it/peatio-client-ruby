@@ -1,10 +1,10 @@
 $:.push File.expand_path("../lib", __FILE__)
 
-require "peatio-client/version"
+require "peatio_client/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "peatio-client"
+  s.name        = "peatio_client"
   s.version     = PeatioClient::VERSION
   s.authors     = ["Peatio Opensource"]
   s.email       = ["community@peatio.com"]
