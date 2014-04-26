@@ -24,12 +24,15 @@ module PeatioAPI
     end
 
     def post(path, params={})
+      uri = URI("#{@endpoint}#{path}")
+      params = @auth.signed_params 'POST', path, params
+      parse Net::HTTP.post_form(uri, params)
     end
 
     private
 
     def parse(response)
-      if response.code == '200'
+      if response.code =~ /2../
         JSON.parse response.body
       else
         raise "Request failed: #{response.body}"
