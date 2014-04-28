@@ -34,11 +34,7 @@ module PeatioAPI
     private
 
     def parse(response)
-      if response.code =~ /2../
-        JSON.parse response.body
-      else
-        raise "Request failed: #{response.body}"
-      end
+      JSON.parse response.body
     end
 
     def setup_auth_keys(options)
