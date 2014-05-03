@@ -20,7 +20,7 @@ Ruby client for Peatio API
 
 TBD
 
-#### Library ####
+#### REST API client ####
 
 Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
 
@@ -44,6 +44,19 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
 ```
 
 Check [Peatio API v2 Documents](https://peatio.com/documents/api_v2) for details on Peatio API.
+
+### Streaming API client ###
+
+Streaming API client is built upon eventmachine, it will start an endless loop to accept updates from server side, you only need to provide a callback block:
+
+```ruby
+  require 'peatio_client'
+
+  client = PeatioAPI::StreamingClient.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'wss://peatio.com:8080'
+  client.run do |message|
+    # do whatever you want with message
+  end
+```
 
 ### License ###
 

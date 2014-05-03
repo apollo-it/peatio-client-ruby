@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio_client (0.0.1)
+    peatio_client (0.0.2)
       activesupport
       websocket-eventmachine-client
 
