@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.files       = Dir["{bin,lib}/**/*"] + ["README.markdown"]
 
   s.add_runtime_dependency('activesupport')
-  s.add_runtime_dependency('websocket-eventmachine-client')
+  s.add_runtime_dependency('faye-websocket')
 end

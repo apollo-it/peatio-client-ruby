@@ -1,6 +1,6 @@
 require 'json'
 require 'eventmachine'
-require 'websocket-eventmachine-client'
+require 'faye/websocket'
 
 module PeatioAPI
   class StreamingClient < Client
@@ -13,14 +13,14 @@ module PeatioAPI
 
     def run(&callback)
       EM.run do
-        ws = WebSocket::EventMachine::Client.connect(uri: @endpoint)
+        ws = Faye::WebSocket::Client.new(@endpoint)
 
-        ws.onopen do
+        ws.on(:open) do |event|
           @logger.info "Connected."
         end
 
-        ws.onmessage do |payload, type|
-          msg = JSON.parse(payload)
+        ws.on(:message) do |event|
+          msg = JSON.parse(event.data)
 
           key = msg.keys.first
           data = msg[key]
@@ -37,8 +37,9 @@ module PeatioAPI
           end
         end
 
-        ws.onclose do
-          @logger.info "Closed."
+        ws.on(:close) do |event|
+          @logger.info "Closed. Code: #{event.code}, Reason: #{event.reason || 'none'}"
+          ws = nil
           EM.stop
         end
 
