@@ -37,6 +37,8 @@ module PeatioAPI
 
     def parse(response)
       JSON.parse response.body
+    rescue JSON::ParserError
+      {http_error: {code: response.code, body: response.body}}
     end
 
     def setup_auth_keys(options)
