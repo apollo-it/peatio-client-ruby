@@ -13,6 +13,13 @@ module PeatioAPI
       @endpoint = options[:endpoint] || 'https://peatio.com'
     end
 
+    def get_public(path, params={})
+      uri = URI("#{@endpoint}#{path}")
+      uri.query = URI.encode_www_form params
+
+      parse Net::HTTP.get_response(uri)
+    end
+
     def get(path, params={})
       uri = URI("#{@endpoint}#{path}")
 
