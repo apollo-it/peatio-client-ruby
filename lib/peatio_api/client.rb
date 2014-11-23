@@ -33,6 +33,7 @@ module PeatioAPI
     def post(path, params={})
       uri = URI("#{@endpoint}#{path}")
       http = Net::HTTP.new(uri.hostname, uri.port)
+      http.open_timeout = 5
       http.use_ssl = true if @endpoint.start_with?('https://')
       http.start do |http|
         params = @auth.signed_params 'POST', path, params
