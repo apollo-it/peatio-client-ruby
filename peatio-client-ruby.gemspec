@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = "A ruby client which can access all Peatio's API."
   s.license     = 'MIT'
 
-  #s.executables = ['pcurl']
+  s.require_paths = ["lib"]
   s.files       = Dir["{bin,lib}/**/*"] + ["README.markdown"]
 
   s.add_runtime_dependency('activesupport')
