@@ -11,6 +11,7 @@ module PeatioAPI
       options.symbolize_keys!
       setup_auth_keys options
       @endpoint = options[:endpoint] || 'https://yunbi.com'
+      @timeout  = options[:timeout]  || 60
     end
 
     def get_public(path, params={})
@@ -48,7 +49,7 @@ module PeatioAPI
       params = auth.signed_params action.to_s.upcase, path, params if auth
 
       http = Net::HTTP.new(uri.hostname, uri.port)
-      http.open_timeout = 5
+      http.open_timeout = @timeout
       http.use_ssl = true if @endpoint.start_with?('https://')
 
       http.start do |http|

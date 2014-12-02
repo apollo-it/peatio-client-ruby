@@ -33,8 +33,14 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
   # GET public api /api/v2/markets
   client_public.get_public '/api/v2/markets'
 
-  # All scope client needs access_key/secret_key. `endpoint` can be ignored
-  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://peatio.com'
+  # To build a full functional client which can access both public/private api, access_key/secret_key
+  # are required.
+  #
+  # `endpoint` can be ignored or set to any Peatio powered exchange.
+  #
+  # If there's no data received in `timeout` seconds, Net::OpenTimeout will be raised. Default to 60.
+  #
+  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://peatio.com', timeout: 60
 
   # GET private api /api/v2/orders with 'market=btccny'
   client.get '/api/v2/orders', market: 'btccny'
