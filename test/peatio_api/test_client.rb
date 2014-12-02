@@ -2,9 +2,9 @@ require 'helper'
 
 class TestClient < Minitest::Test
 
-  def test_initialize_without_keys
+  def test_access_private_apis_without_keys
     assert_raises ArgumentError do
-      PeatioAPI::Client.new
+      PeatioAPI::Client.new.post ''
     end
   end
 

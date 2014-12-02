@@ -10,38 +10,51 @@ module PeatioAPI
     def initialize(options={})
       options.symbolize_keys!
       setup_auth_keys options
-      @endpoint = options[:endpoint] || 'https://peatio.com'
+      @endpoint = options[:endpoint] || 'https://yunbi.com'
     end
 
     def get_public(path, params={})
       uri = URI("#{@endpoint}#{path}")
       uri.query = URI.encode_www_form params
 
-      parse Net::HTTP.get_response(uri)
+      request(:get, path, nil, params) do |http, _|
+        http.request_get(uri.request_uri)
+      end
     end
 
     def get(path, params={})
+      check_auth!
+
       uri = URI("#{@endpoint}#{path}")
 
-      # sign on all requests, even those to public API
-      signed_params = @auth.signed_params 'GET', path, params
-      uri.query = URI.encode_www_form signed_params
-
-      parse Net::HTTP.get_response(uri)
+      request(:get, path, @auth, params) do |http, signed_params|
+        uri.query = URI.encode_www_form signed_params
+        http.request_get(uri.request_uri)
+      end
     end
 
     def post(path, params={})
-      uri = URI("#{@endpoint}#{path}")
-      http = Net::HTTP.new(uri.hostname, uri.port)
-      http.open_timeout = 5
-      http.use_ssl = true if @endpoint.start_with?('https://')
-      http.start do |http|
-        params = @auth.signed_params 'POST', path, params
-        parse http.request_post(path, params.to_query)
+      check_auth!
+
+      request(:post, path, @auth, params) do |http, signed_params|
+        http.request_post(path, signed_params.to_query)
       end
     end
 
     private
+
+    def request(action, path, auth, params={})
+      uri = URI("#{@endpoint}#{path}")
+      params = auth.signed_params action.to_s.upcase, path, params if auth
+
+      http = Net::HTTP.new(uri.hostname, uri.port)
+      http.open_timeout = 5
+      http.use_ssl = true if @endpoint.start_with?('https://')
+
+      http.start do |http|
+        parse yield(http, params)
+      end
+    end
 
     def parse(response)
       JSON.parse response.body
@@ -55,9 +68,12 @@ module PeatioAPI
         @secret_key = options[:secret_key]
         @auth       = Auth.new @access_key, @secret_key
       else
-        raise ArgumentError, 'Missing access key and/or secret key'
+        #raise ArgumentError, 'Missing access key and/or secret key'
       end
     end
 
+    def check_auth!
+      raise ArgumentError, 'Missing access key and/or secret key' if @auth.nil?
+    end
   end
 end

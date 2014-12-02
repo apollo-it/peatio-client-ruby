@@ -27,11 +27,14 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
 ```ruby
   require 'peatio_client'
 
-  # initialize client. `endpoint` can be ignored
-  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://peatio.com'
+  # Client can be initialized not providing key and sercet, but this client can only access public APIs
+  client_public = PeatioAPI::Client.new endpoint: 'https://peatio.com'
 
   # GET public api /api/v2/markets
-  client.get '/api/v2/markets'
+  client_public.get_public '/api/v2/markets'
+
+  # All scope client needs access_key/secret_key. `endpoint` can be ignored
+  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://peatio.com'
 
   # GET private api /api/v2/orders with 'market=btccny'
   client.get '/api/v2/orders', market: 'btccny'
