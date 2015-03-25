@@ -1,3 +1,4 @@
+require 'logger'
 require 'json'
 require 'eventmachine'
 require 'faye/websocket'
