@@ -28,7 +28,7 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
   require 'peatio_client'
 
   # Client can be initialized not providing key and sercet, but this client can only access public APIs
-  client_public = PeatioAPI::Client.new endpoint: 'https://peatio.com'
+  client_public = PeatioAPI::Client.new endpoint: 'https://yunbi.com'
 
   # GET public api /api/v2/markets
   client_public.get_public '/api/v2/markets'
@@ -40,7 +40,7 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
   #
   # If there's no data received in `timeout` seconds, Net::OpenTimeout will be raised. Default to 60.
   #
-  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://peatio.com', timeout: 60
+  client = PeatioAPI::Client.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'https://yunbi.com', timeout: 60
 
   # GET private api /api/v2/orders with 'market=btccny'
   client.get '/api/v2/orders', market: 'btccny'
@@ -52,7 +52,7 @@ Use `#get` or `#post` to access API after you created a `PeatioAPI::Client`:
   client.post '/api/v2/orders/multi', market: 'btccny', orders: [{side: 'buy', volume: '0.15', price: '2955.0'}, {side: 'sell', volume: '0.16', price: '2956'}]
 ```
 
-Check [Peatio API v2 Documents](https://peatio.com/documents/api_v2) for details on Peatio API.
+Check [Peatio API v2 Documents](https://yunbi.com/documents/api_v2) for details on Peatio API.
 
 ### Streaming API client ###
 
@@ -61,7 +61,7 @@ Streaming API client is built upon eventmachine, it will start an endless loop t
 ```ruby
   require 'peatio_client'
 
-  client = PeatioAPI::StreamingClient.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'wss://peatio.com:8080'
+  client = PeatioAPI::StreamingClient.new access_key: 'your_access_key', secret_key: 'your_secret_key', endpoint: 'wss://yunbi.com:8080'
   client.run do |message|
     # do whatever you want with message
   end
