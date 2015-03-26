@@ -8,7 +8,7 @@ module PeatioAPI
     attr :auth
 
     def initialize(options={})
-      options.symbolize_keys!
+      options = options.symbolize_keys
       setup_auth_keys options
       @endpoint = options[:endpoint] || 'https://yunbi.com'
       @timeout  = options[:timeout]  || 60
